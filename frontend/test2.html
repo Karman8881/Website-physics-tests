@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест по биологии</title>
+    <link rel="stylesheet" href="/static/test_styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Тест 2: Тепловые явления</h1>
+        <form action="/submit_test" method="post">
+            {% for question in questions %}
+            <div class="question">
+                <p>{{ question[1] }}</p>  <!-- question_text -->
+                <label>
+                    <input type="radio" name="question_{{ question[0] }}" value="1">
+                    {{ question[2] }}  <!-- option1 -->
+                </label>
+                <label>
+                    <input type="radio" name="question_{{ question[0] }}" value="2">
+                    {{ question[3] }}  <!-- option2 -->
+                </label>
+                <label>
+                    <input type="radio" name="question_{{ question[0] }}" value="3">
+                    {{ question[4] }}  <!-- option3 -->
+                </label>
+                <label>
+                    <input type="radio" name="question_{{ question[0] }}" value="4">
+                    {{ question[5] }}  <!-- option4 -->
+                </label>
+            </div>
+            {% endfor %}
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+</body>
+</html>
