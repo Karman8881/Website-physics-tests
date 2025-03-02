@@ -138,3 +138,92 @@ h1 {
 #submitTest:hover {
     background: #555;
 }
+
+/* Стили для страницы с результатами */
+.result-summary {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.result-summary h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #333;
+}
+
+.result-summary p {
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+.result-summary strong {
+    color: #555;
+}
+
+.detailed-results {
+    margin-top: 20px;
+}
+
+.detailed-results h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.question-result {
+    background: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.question-result.correct {
+    border-left: 5px solid #4caf50;
+    background-color: #e8f5e9;
+}
+
+.question-result.incorrect {
+    border-left: 5px solid #f44336;
+    background-color: #ffebee;
+}
+
+.question-result p {
+    margin: 5px 0;
+    font-size: 1em;
+}
+
+.question-result .correct-answer {
+    color: #4caf50;
+    font-weight: bold;
+}
+
+.question-result .user-answer {
+    color: #f44336;
+    font-weight: bold;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background: #555;
+}
+
+.center {
+    text-align: center;
+    margin-top: 20px;
+}

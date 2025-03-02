@@ -20,6 +20,21 @@ class Test(BaseModel):
     class Config:
         orm_mode = True
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: str = None
+    
+    # Модель для создания вопроса
+class QuestionCreate(BaseModel):
+    text: str
+    options: List[str]
+    correct_answer: str
+    test_id: int
+
+# Модель для представления вопроса
 class Question(BaseModel):
     id: int
     text: str
@@ -30,9 +45,11 @@ class Question(BaseModel):
     class Config:
         orm_mode = True
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str
+# Модель для ответов на тест
+class TestAnswers(BaseModel):
+    answers: Dict[str, str]  # {question_id: answer}
 
-class TokenData(BaseModel):
-    username: str = None
+# Модель для результата теста
+class TestResult(BaseModel):
+    correct_answers: int
+    total_questions: int

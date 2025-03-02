@@ -77,3 +77,25 @@ def read_tests(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 def read_questions(test_id: int, db: Session = Depends(get_db)):
     questions = db.query(models.Question).filter(models.Question.test_id == test_id).all()
     return questions
+
+
+@app.get("/tests/{test_id}/questions/", response_model=list[schemas.Question])
+def read_questions(test_id: int, db: Session = Depends(get_db)):
+    questions = db.query(models.Question).filter(models.Question.test_id == test_id).all()
+    if not questions:
+        raise HTTPException(status_code=404, detail="Вопросы не найдены")
+    return questions
+
+# Отправка ответов на тест
+@app.post("/tests/{test_id}/submit/")
+def submit_test(test_id: int, answers: schemas.TestAnswers, db: Session = Depends(get_db)):
+    questions = db.query(models.Question).filter(models.Question.test_id == test_id).all()
+    if not questions:
+        raise HTTPException(status_code=404, detail="Тест не найден")
+
+    correct_answers = 0
+    for question in questions:
+        if question.correct_answer == answers.answers.get(str(question.id)):
+            correct_answers += 1
+
+    return {"correct_answers": correct_answers, "total_questions": len(questions)}

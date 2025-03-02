@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты теста</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Результаты теста</h1>
+
+        <!-- Итоговый результат -->
+        <div class="result-summary">
+            <h2>Итоговый результат</h2>
+            <p>Правильных ответов: <strong>{{ correct_answers }}</strong> из <strong>{{ total_questions }}</strong></p>
+            <p>Процент правильных ответов: <strong>{{ percentage }}%</strong></p>
+        </div>
+
+        <!-- Подробные результаты -->
+        <div class="detailed-results">
+            <h2>Подробные результаты</h2>
+            {% for result in results %}
+                <div class="question-result {% if result.is_correct %}correct{% else %}incorrect{% endif %}">
+                    <p><strong>Вопрос:</strong> {{ result.question_text }}</p>
+                    <p><strong>Ваш ответ:</strong> <span class="user-answer">{{ result.user_answer }}</span></p>
+                    <p><strong>Правильный ответ:</strong> <span class="correct-answer">{{ result.correct_answer }}</span></p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Кнопка для возврата к тестам -->
+        <div class="center">
+            <a href="/tests" class="btn">Вернуться к тестам</a>
+        </div>
+    </div>
+</body>
+</html>

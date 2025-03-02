@@ -3,36 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тест по биологии</title>
-    <link rel="stylesheet" href="/static/test_styles.css">
+    <title>Тест 3: Электричество и магнетизм</title>
+    <link rel="stylesheet" href="/site/style.css">
 </head>
 <body>
     <div class="container">
         <h1>Тест 3: Электричество и магнетизм</h1>
-        <form action="/submit_test" method="post">
-            {% for question in questions %}
+        <form id="testForm">
             <div class="question">
-                <p>{{ question[1] }}</p>  <!-- question_text -->
+                <p>1. Что такое электрический заряд?</p>
                 <label>
-                    <input type="radio" name="question_{{ question[0] }}" value="1">
-                    {{ question[2] }}  <!-- option1 -->
+                    <input type="radio" name="question1" value="1">
+                    Физическая величина, характеризующая способность создавать электрическое поле
                 </label>
                 <label>
-                    <input type="radio" name="question_{{ question[0] }}" value="2">
-                    {{ question[3] }}  <!-- option2 -->
+                    <input type="radio" name="question1" value="2">
+                    Физическая величина, характеризующая способность проводить ток
                 </label>
                 <label>
-                    <input type="radio" name="question_{{ question[0] }}" value="3">
-                    {{ question[4] }}  <!-- option3 -->
+                    <input type="radio" name="question1" value="3">
+                    Энергия электрического поля
                 </label>
                 <label>
-                    <input type="radio" name="question_{{ question[0] }}" value="4">
-                    {{ question[5] }}  <!-- option4 -->
+                    <input type="radio" name="question1" value="4">
+                    Сила электрического тока
                 </label>
             </div>
-            {% endfor %}
-            <button type="submit">Отправить</button>
+            <div class="question">
+                <p>2. Какой закон описывает силу взаимодействия двух точечных зарядов?</p>
+                <label>
+                    <input type="radio" name="question2" value="1">
+                    Закон Ома
+                </label>
+                <label>
+                    <input type="radio" name="question2" value="2">
+                    Закон Кулона
+                </label>
+                <label>
+                    <input type="radio" name="question2" value="3">
+                    Закон Ампера
+                </label>
+                <label>
+                    <input type="radio" name="question2" value="4">
+                    Закон Фарадея
+                </label>
+            </div>
+            <button type="submit">Завершить тест</button>
         </form>
+        <div id="result" style="display: none;">
+            <h2>Ваш результат</h2>
+            <p id="score"></p>
+        </div>
     </div>
+    <script src="/site/script.js"></script>
 </body>
 </html>

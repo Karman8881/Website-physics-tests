@@ -3,36 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тест по биологии</title>
-    <link rel="stylesheet" href="/static/test_styles.css">
+    <title>Тест 1: Основы механики</title>
+    <link rel="stylesheet" href="/site/style.css">
 </head>
 <body>
     <div class="container">
         <h1>Тест 1: Основы механики</h1>
-        <form action="/submit_test" method="post">
-            {% for question in questions %}
+        <form id="testForm">
             <div class="question">
-                <p>{{ question[1] }}</p>  <!-- question_text -->
+                <p>1. Что такое инерция?</p>
                 <label>
-                    <input type="radio" name="question_{{ question[0] }}" value="1">
-                    {{ question[2] }}  <!-- option1 -->
+                    <input type="radio" name="question1" value="1">
+                    Сила, действующая на тело
                 </label>
                 <label>
-                    <input type="radio" name="question_{{ question[0] }}" value="2">
-                    {{ question[3] }}  <!-- option2 -->
+                    <input type="radio" name="question1" value="2">
+                    Свойство тела сохранять состояние покоя или равномерного движения
                 </label>
                 <label>
-                    <input type="radio" name="question_{{ question[0] }}" value="3">
-                    {{ question[4] }}  <!-- option3 -->
+                    <input type="radio" name="question1" value="3">
+                    Энергия движения
                 </label>
                 <label>
-                    <input type="radio" name="question_{{ question[0] }}" value="4">
-                    {{ question[5] }}  <!-- option4 -->
+                    <input type="radio" name="question1" value="4">
+                    Ускорение тела
                 </label>
             </div>
-            {% endfor %}
-            <button type="submit">Отправить</button>
+            <div class="question">
+                <p>2. Какой закон Ньютона описывает F=ma?</p>
+                <label>
+                    <input type="radio" name="question2" value="1">
+                    Первый закон Ньютона
+                </label>
+                <label>
+                    <input type="radio" name="question2" value="2">
+                    Второй закон Ньютона
+                </label>
+                <label>
+                    <input type="radio" name="question2" value="3">
+                    Третий закон Ньютона
+                </label>
+                <label>
+                    <input type="radio" name="question2" value="4">
+                    Закон всемирного тяготения
+                </label>
+            </div>
+            <button type="submit">Завершить тест</button>
         </form>
+        <div id="result" style="display: none;">
+            <h2>Ваш результат</h2>
+            <p id="score"></p>
+        </div>
     </div>
+    <script src="/site/script.js"></script>
 </body>
 </html>
