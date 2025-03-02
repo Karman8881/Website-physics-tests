@@ -58,3 +58,8 @@ class TestAnswers(BaseModel):
 class TestResult(BaseModel):
     correct_answers: int
     total_questions: int
+    
+class UserTestResultCreate(BaseModel):
+    user_id: int
+    test_id: int
+    score: int
