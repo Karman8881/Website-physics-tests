@@ -19,6 +19,11 @@ class Test(BaseModel):
 
     class Config:
         orm_mode = True
+        
+# Модель для создания теста
+class TestCreate(BaseModel):
+    title: str
+    description: str
 
 class Token(BaseModel):
     access_token: str
