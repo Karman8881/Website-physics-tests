@@ -23,7 +23,10 @@ class Question(Base):
     id = Column(Integer, primary_key=True, index=True)
     text = Column(String, index=True)
     test_id = Column(Integer, ForeignKey("tests.id"))
-    options = Column(String)  # JSON строка с вариантами ответов
+    options1 = Column(String)
+    options2 = Column(String)# JSON строка с вариантами ответов
+    options3 = Column(String)
+    options4 = Column(String)
     correct_answer = Column(String)
    # Связь с тестом
     #test = relationship("Test", back_populates="questions")
