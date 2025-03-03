@@ -25,7 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Проверка токена
     const token = window.localStorage.getItem('token');
     if (token === null && window.location.pathname.endsWith('tests.html')) {
-        console.log(token);
         window.location.href = '/site/index.html'; // Перенаправление на страницу входа, если токена нет
         return;
     }
@@ -55,17 +54,17 @@ function registerUser(username, password) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Registration failed');
+                throw new Error('Ошибка регистрации: Проверьте введенные данные');
             }
             return response.json();
         })
         .then(data => {
-            alert('Registration successful');
+            alert('Регистрация прошла успешно!');
             window.location.href = '/site/index.html'; // Перенаправление на страницу входа
         })
         .catch((error) => {
-            console.error('Error:', error);
-            alert('Registration failed. Please try again.');
+            console.error('Ошибка:', error);
+            alert(error.message || 'Ошибка регистрации. Попробуйте снова.');
         });
 }
 
@@ -84,18 +83,18 @@ function loginUser(username, password) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Login failed');
+                throw new Error('Ошибка входа: Проверьте логин и пароль');
             }
             return response.json();
         })
         .then(data => {
             window.localStorage.setItem('token', data.access_token);
-            alert('Login successful');
+            alert('Вход выполнен успешно!');
             window.location.href = '/site/tests.html'; // Перенаправление на страницу тестов
         })
         .catch((error) => {
-            console.error('Error:', error);
-            alert('Login failed. Please check your credentials.');
+            console.error('Ошибка:', error);
+            alert(error.message || 'Ошибка входа. Попробуйте снова.');
         });
 }
 
@@ -108,7 +107,7 @@ function fetchTests() {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to fetch tests');
+                throw new Error('Не удалось загрузить тесты');
             }
             return response.json();
         })
@@ -117,18 +116,18 @@ function fetchTests() {
             testsContainer.innerHTML = '';
             data.forEach(test => {
                 const testElement = document.createElement('div');
-                testElement.className = 'test';
+                testElement.className = 'test fade-in';
                 testElement.innerHTML = `
                     <h2>${test.title}</h2>
                     <p>${test.description}</p>
-                    <button onclick="startTest(${test.id})">Start Test</button>
+                    <button onclick="startTest(${test.id})">Начать тест</button>
                 `;
                 testsContainer.appendChild(testElement);
             });
         })
         .catch((error) => {
-            console.error('Error:', error);
-            alert('Failed to load tests. Please try again.');
+            console.error('Ошибка:', error);
+            alert(error.message || 'Не удалось загрузить тесты. Попробуйте снова.');
         });
 }
 
@@ -141,34 +140,38 @@ function startTest(testId) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to fetch questions');
+                throw new Error('Не удалось загрузить вопросы');
             }
             return response.json();
         })
         .then(data => {
             document.getElementById('tests').style.display = 'none';
             document.getElementById('questions').style.display = 'block';
-            document.getElementById('testTitle').innerText = `Test ${testId}`;
+            document.getElementById('testTitle').innerText = `Тест ${testId}`;
+
             const questionsList = document.getElementById('questionsList');
             questionsList.innerHTML = ''; // Очистка контейнера перед добавлением вопросов
+
             data.forEach((question, index) => {
                 const questionElement = document.createElement('div');
-                questionElement.className = 'question';
+                questionElement.className = 'question fade-in';
                 questionElement.innerHTML = `
-                    <p>${index + 1}. ${question.text}</p>
-                    ${question.options.map(option => `
-                        <label>
-                            <input type="radio" name="question${question.id}" value="${option}">
-                            ${option}
-                        </label>
-                    `).join('')}
+                    <p><strong>Вопрос ${index + 1}:</strong> ${question.text}</p>
+                    <div class="options">
+                        ${question.options.map((option, optionIndex) => `
+                            <label>
+                                <input type="radio" name="question${question.id}" value="${option}">
+                                ${option}
+                            </label><br>
+                        `).join('')}
+                    </div>
                 `;
                 questionsList.appendChild(questionElement);
             });
         })
         .catch((error) => {
-            console.error('Error:', error);
-            alert('Failed to load questions. Please try again.');
+            console.error('Ошибка:', error);
+            alert(error.message || 'Не удалось загрузить вопросы. Попробуйте снова.');
         });
 }
 
@@ -176,6 +179,8 @@ function startTest(testId) {
 function submitTest() {
     const questions = document.querySelectorAll('.question');
     let score = 0;
+    const results = [];
+
     questions.forEach(question => {
         const selectedOption = question.querySelector('input[type="radio"]:checked');
         if (selectedOption) {
@@ -183,9 +188,45 @@ function submitTest() {
             const correctAnswer = Array.from(questions).find(q => q.id === parseInt(questionId)).correct_answer;
             if (selectedOption.value === correctAnswer) {
                 score++;
+                results.push({ questionId, correct: true });
+            } else {
+                results.push({ questionId, correct: false });
             }
         }
     });
-    alert(`Your score is ${score}/${questions.length}`);
-    // window.location.href = 'tests.html'; // Раскомментируйте, если хотите перенаправить пользователя
+
+    // Отображение результатов
+    showResults(score, questions.length, results);
+}
+
+// Функция отображения результатов
+function showResults(score, totalQuestions, results) {
+    const questionsList = document.getElementById('questionsList');
+    questionsList.innerHTML = ''; // Очистка контейнера перед добавлением результатов
+
+    const resultElement = document.createElement('div');
+    resultElement.className = 'result-summary fade-in';
+    resultElement.innerHTML = `
+        <h2>Результаты теста</h2>
+        <p>Вы ответили правильно на <strong>${score}</strong> из <strong>${totalQuestions}</strong> вопросов.</p>
+    `;
+    questionsList.appendChild(resultElement);
+
+    results.forEach(result => {
+        const questionResult = document.createElement('div');
+        questionResult.className = `question-result ${result.correct ? 'correct' : 'incorrect'} fade-in`;
+        questionResult.innerHTML = `
+            <p>Вопрос ${result.questionId}: ${result.correct ? 'Правильно' : 'Неправильно'}</p>
+        `;
+        questionsList.appendChild(questionResult);
+    });
+
+    // Кнопка для возврата к тестам
+    const backButton = document.createElement('button');
+    backButton.className = 'btn center';
+    backButton.innerText = 'Вернуться к тестам';
+    backButton.addEventListener('click', () => {
+        window.location.href = '/site/tests.html';
+    });
+    questionsList.appendChild(backButton);
 }

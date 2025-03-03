@@ -42,3 +42,4 @@ class UserTestResult(Base):
     #user = relationship("User", back_populates="test_results")
     # Связь с тестом
     #test = relationship("Test")
+    

@@ -44,7 +44,10 @@ class Question(BaseModel):
     id: int
     text: str
     test_id: int
-    options: List[str]
+    options1: str
+    options2: str
+    options3: str
+    options4: str
     correct_answer: str
 
     class Config:

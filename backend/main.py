@@ -76,12 +76,6 @@ def read_tests(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 @app.get("/tests/{test_id}/questions/", response_model=list[schemas.Question])
 def read_questions(test_id: int, db: Session = Depends(get_db)):
     questions = db.query(models.Question).filter(models.Question.test_id == test_id).all()
-    return questions
-
-
-@app.get("/tests/{test_id}/questions/", response_model=list[schemas.Question])
-def read_questions(test_id: int, db: Session = Depends(get_db)):
-    questions = db.query(models.Question).filter(models.Question.test_id == test_id).all()
     if not questions:
         raise HTTPException(status_code=404, detail="Вопросы не найдены")
     return questions
@@ -95,7 +89,38 @@ def submit_test(test_id: int, answers: schemas.TestAnswers, db: Session = Depend
 
     correct_answers = 0
     for question in questions:
-        if question.correct_answer == answers.answers.get(str(question.id)):
+        user_answer = answers.answers.get(str(question.id))
+        if user_answer and user_answer == question.correct_answer:
             correct_answers += 1
 
-    return {"correct_answers": correct_answers, "total_questions": len(questions)}
+    # Сохранение результата теста
+    result = crud.create_user_test_result(
+        db=db,
+        result=schemas.UserTestResultCreate(
+            user_id=answers.user_id,  # ID пользователя из ответа
+            test_id=test_id,
+            score=correct_answers
+        )
+    )
+
+    return {
+        "correct_answers": correct_answers,
+        "total_questions": len(questions),
+        "result_id": result.id
+    }
+
+# Получение результата теста по ID
+@app.get("/results/{result_id}/", response_model=schemas.UserTestResult)
+def get_test_result(result_id: int, db: Session = Depends(get_db)):
+    result = crud.get_user_test_result(db, result_id=result_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="Результат не найден")
+    return result
+
+# Получение всех результатов пользователя
+@app.get("/users/{user_id}/results/", response_model=list[schemas.UserTestResult])
+def get_user_results(user_id: int, db: Session = Depends(get_db)):
+    results = crud.get_user_test_results(db, user_id=user_id)
+    if not results:
+        raise HTTPException(status_code=404, detail="Результаты не найдены")
+    return results

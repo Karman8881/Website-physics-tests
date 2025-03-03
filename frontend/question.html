@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест: {{ test_title }}</title>
+    <link rel="stylesheet" href="/static/test_styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Тест: {{ test_title }}</h1>
+        <form id="testForm" action="/submit_test" method="post">
+            {% for question in questions %}
+            <div class="question">
+                <p><strong>Вопрос {{ loop.index }}:</strong> {{ question[1] }}</p>  <!-- question_text -->
+                <div class="options">
+                    <label>
+                        <input type="radio" name="question_{{ question[0] }}" value="1" required>
+                        {{ question[2] }}  <!-- option1 -->
+                    </label><br>
+                    <label>
+                        <input type="radio" name="question_{{ question[0] }}" value="2">
+                        {{ question[3] }}  <!-- option2 -->
+                    </label><br>
+                    <label>
+                        <input type="radio" name="question_{{ question[0] }}" value="3">
+                        {{ question[4] }}  <!-- option3 -->
+                    </label><br>
+                    <label>
+                        <input type="radio" name="question_{{ question[0] }}" value="4">
+                        {{ question[5] }}  <!-- option4 -->
+                    </label><br>
+                </div>
+            </div>
+            {% endfor %}
+            <button type="submit" id="submitTest">Отправить</button>
+        </form>
+    </div>
+
+   <!-- <script>
+        // Обработка отправки формы
+        document.getElementById('testForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Предотвращаем стандартную отправку формы
+
+            const formData = new FormData(this);
+            const answers = {};
+
+            // Собираем ответы
+            formData.forEach((value, key) => {
+                answers[key] = value;
+            });
+
+            // Отправляем ответы на сервер
+            fetch('/submit_test', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ answers }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка при отправке теста');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Перенаправляем на страницу с результатами
+                    window.location.href = `/results?score=${data.score}&total=${data.totalQuestions}`;
+                })
+                .catch((error) => {
+                    console.error('Ошибка:', error);
+                    alert('Ошибка при отправке теста. Попробуйте снова.');
+                });
+        });
+    </script>-->
+</body>
+</html>
